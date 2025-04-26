@@ -1,8 +1,9 @@
 const express = require("express")
 const router = express.Router()
-const usersController = require("../users/usersController.js")
+const registerController = require("../register/registerController.js")
 
-router.post("/register", usersController.register)  // Criar um novo usuário
-router.post("/register", usersController.register)  // Criar um novo usuário
+router.post("/aluno", registerController.register)  // Registro - Aluno
+router.post("/ie", registerController.register)  // Registro - IE
+router.post("/empresa", registerController.register)  // Registro - Empesa
 
 module.exports = router

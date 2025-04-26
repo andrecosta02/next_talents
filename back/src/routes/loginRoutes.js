@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router()
-const loginController = require("../login/loginController.js")
+const loginController = require("../register/registerController.js")
 
 router.post("/aluno", loginController.register)  // Login Aluno
 router.post("/ie", loginController.register)  // Login IE
