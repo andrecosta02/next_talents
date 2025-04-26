@@ -1,4 +1,4 @@
-const usersService = require("./registerService")
+const registerService = require("./registerService")
 const { validationResult } = require('express-validator');
 const { body, param } = require('express-validator');
 const bcrypt = require('bcrypt');
@@ -12,7 +12,7 @@ module.exports = {
     // listAll: async (req, res) => {
     //     let amount = 0
     //     let json = {statusCode:"", message:"", amount:"", result:[]}
-    //     let user = await usersService.listAll()
+    //     let user = await registerService.listAll()
 
     //     for(let i in user) {
     //         res.statusCode = 200
@@ -43,7 +43,7 @@ module.exports = {
     //     let json = {statusCode:"", message:"", result:[]}
 
     //     let userId = req.params.userId
-    //     let user = await usersService.listOne(userId)
+    //     let user = await registerService.listOne(userId)
 
     //     if(user) { 
     //         res.statusCode = 200
@@ -149,7 +149,7 @@ module.exports = {
         }
 
 
-        const returnQry = await usersService.register(name, last_name, email, birth, hash_psw, cpf, cep, city)
+        const returnQry = await registerService.register(name, last_name, email, birth, hash_psw, cpf, cep, city)
         codeReturn = returnQry[0] // 1 = OK, 2 = User Not Fount
 
         if (codeReturn == "1") {
@@ -193,7 +193,7 @@ module.exports = {
     //     }
 
     //     if(userId && name || email || address){
-    //         await usersService.update(userId, name, email, address);
+    //         await registerService.update(userId, name, email, address);
     //         json.result = {
     //             userId: userId,
     //             userName: name,
@@ -215,7 +215,7 @@ module.exports = {
     //     let json = {statusCode:"", message:"", result:[]}
     //     let messageJson
     //     let userId = req.params.userId;
-    //     await usersService.delete(userId);
+    //     await registerService.delete(userId);
     //     messageJson = messageJson
 
 
