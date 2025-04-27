@@ -1,16 +1,16 @@
 const authService = require("./authService");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const redisClient = require('../redisClient');  // Importando o Redis Client
+const redisClient = require('../../redisClient');  // Importando o Redis Client
 require("dotenv-safe").config();
 
 const date = new Date()
-const fullDate = `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2,'0')}${date.getDate().toString().padStart(2,'0')}`
+const fullDate = `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`
 
 module.exports = {
 
     login: async (req, res) => {
-        let json = {statusCode:"", message:"", jwt: "", auth: false,result:[]}
+        let json = { statusCode: "", message: "", jwt: "", auth: false, result: [] }
         let qryUsers = []
         let username = req.body.username
         let psw = req.body.psw
@@ -25,7 +25,7 @@ module.exports = {
 
             if (isMatch) {
                 const token = jwt.sign({ userId }, process.env.SECRET, {
-                  expiresIn: 300
+                    expiresIn: 300
                 });
 
                 redisClient.setex(token, 3600, JSON.stringify(userId));
@@ -35,7 +35,7 @@ module.exports = {
                 json.jwt = token
                 json.auth = true
                 json.message = "Successful Login"
-                
+
             } else {
                 res.statusCode = 401
                 json.statusCode = "401"
@@ -44,11 +44,11 @@ module.exports = {
         } else {
             res.statusCode = 404
             json.statusCode = "404"
-            json.message = "User not Found"  
+            json.message = "User not Found"
         }
-        
+
         console.log(" - " + json.message)
-        
+
         res.json(json)
         IpPublicQuery(req)
     },
@@ -85,10 +85,10 @@ module.exports = {
     }
 }
 
-function IpPublicQuery(req) { 
+function IpPublicQuery(req) {
     console.log(` - ${req.method}`)
     console.log(` - ${req.baseUrl}${req.url}`)
-    console.log(` - ${req.connection.remoteAddress} } \n`) 
+    console.log(` - ${req.connection.remoteAddress} } \n`)
 }
 
 function comparePassword(password, hash) {

@@ -1,4 +1,4 @@
-const registerService = require("./registerService")
+const registerService = require("./ieService")
 const { validationResult } = require('express-validator');
 const { body, param } = require('express-validator');
 const bcrypt = require('bcrypt');

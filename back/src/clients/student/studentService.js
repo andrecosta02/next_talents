@@ -1,7 +1,10 @@
-const db = require("../db")
+const db = require("../../db.js")
 let query = ""
 let values = ""
 let returnQry = []
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 module.exports = {
 
@@ -33,14 +36,14 @@ module.exports = {
     //                 resolve(false);
     //             }
     //         })
-            
+
     //         consoleResult(query, values)
     //     })
     // },
 
 
 
-    register: (name,last_name,email,birth,pass,cpf,cep,city) => {
+    register: (name, last_name, email, birth, pass, cpf, cep, city) => {
         return new Promise((resolve, reject) => {
             // let querySelect = " SELECT * FROM users WHERE username = '?' OR email  = '?' OR cpf    = '?'"
             let querySelect = ""
@@ -52,14 +55,14 @@ module.exports = {
             querySelect += `    OR cpf      = ? `
             let valueSelect = [email, cpf]
 
-            db.query(querySelect , valueSelect,(error, results) => {
-            
-                if(results.length == 0){
+            db.query(querySelect, valueSelect, (error, results) => {
+
+                if (results.length == 0) {
                     query = `INSERT INTO student (name,last_name,email,birth,pass,cpf,cep,city) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
-                    values = [name,last_name,email,birth,pass,cpf,cep,city]
-                    
-                    db.query(query, values,(error, results) => {
-                        if(error) { 
+                    values = [name, last_name, email, birth, pass, cpf, cep, city]
+
+                    db.query(query, values, (error, results) => {
+                        if (error) {
                             reject(error)
                             return
                         }
@@ -75,7 +78,7 @@ module.exports = {
                     consoleResult()
                     resolve(returnQry)
                 }
-            
+
             })
         })
     },
@@ -85,29 +88,29 @@ module.exports = {
     // update: (clientId, clientName, clientEmail, clientAddress) => {
     //     return new Promise((resolve, reject) => {
     //         let query = 'UPDATE client SET ';
-    
+
     //         const updateFields = [];
-    
+
     //         if (clientName) { updateFields.push(`name="${clientName}"`) }
-    
+
     //         if (clientEmail) { updateFields.push(`email="${clientEmail}"`) }
-    
+
     //         if (clientAddress) { updateFields.push(`address="${clientAddress}"`) }
-    
+
     //         if (updateFields.length === 0) {
     //             reject(new Error('Nenhum campo válido para atualização fornecido.'));
     //             return;
     //         }
-    
+
     //         query += updateFields.join(', ');
     //         query += ` WHERE client_id = "${clientId}"`;
-    
+
     //         db.query(query, (error, results) => {
     //             if (error) {
     //                 reject(error);
     //                 return;
     //             }
-    
+
     //             resolve(results);
     //         });
     //         consoleResult(query)
@@ -115,7 +118,7 @@ module.exports = {
 
 
     // },
-    
+
 
 
     // delete: (clientId) =>{
@@ -148,15 +151,108 @@ module.exports = {
 
     //     })
     // },
-    
+
 }
+
+
+module.exports.saveResetToken = (userId, token, expiresAt) => {
+    return new Promise((resolve, reject) => {
+        query = `
+            INSERT INTO password_resets (user_id, user_type, token, expires_at)
+            VALUES (?, 'student', ?, ?)
+        `;
+        values = [userId, token, expiresAt];
+
+        db.query(query, values, (error, results) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+            consoleResult();
+            resolve(results);
+        });
+    });
+};
+
+module.exports.findResetToken = (token) => {
+    return new Promise((resolve, reject) => {
+        query = `
+            SELECT * FROM password_resets
+            WHERE token = ? AND user_type = 'student' AND used = FALSE AND expires_at > NOW()
+        `;
+        values = [token];
+
+        db.query(query, values, (error, results) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+            resolve(results.length > 0 ? results[0] : false);
+        });
+    });
+};
+
+module.exports.markTokenAsUsed = (tokenId) => {
+    return new Promise((resolve, reject) => {
+        query = `
+            UPDATE password_resets
+            SET used = TRUE
+            WHERE id = ?
+        `;
+        values = [tokenId];
+
+        db.query(query, values, (error, results) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+            consoleResult();
+            resolve(results);
+        });
+    });
+};
+
+module.exports.updatePassword = (userId, newPasswordHash) => {
+    return new Promise((resolve, reject) => {
+        query = `
+            UPDATE student
+            SET pass = ?
+            WHERE id = ?
+        `;
+        values = [newPasswordHash, userId];
+
+        db.query(query, values, (error, results) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+            consoleResult();
+            resolve(results);
+        });
+    });
+};
+
+module.exports.getUserByEmail = (email) => {
+    return new Promise((resolve, reject) => {
+        query = `SELECT * FROM student WHERE email = ?`;
+        values = [email];
+
+        db.query(query, values, (error, results) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+            resolve(results.length > 0 ? results[0] : false);
+        });
+    });
+};
 
 function consoleResult() {
     let date = new Date()
     const brasilTime = date.toLocaleString('pt-BR', { timeZone: 'America/Recife' });
-    
+
     console.log(`Consult {`)
     console.log(` - ${brasilTime}`)
     console.log(" - " + query, values)
-    
+
 }

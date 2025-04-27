@@ -21,6 +21,7 @@
     "express-validator": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "mysql": "^2.18.1",
+    "nodemailer": "^6.10.1",
     "nodemon": "^3.1.4",
     "promise-redis": "^0.0.5",
     "redis": "^4.6.15",

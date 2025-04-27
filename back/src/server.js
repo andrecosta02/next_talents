@@ -6,7 +6,7 @@ const request = require("request")
 const http = require('http')
 const jwt = require('jsonwebtoken')
 
-const routes = require("./routes/routes")
+const routes = require("./routes/routes.js")
 const server = express()
 
 server.use(bodyParser.json())

@@ -1,5 +1,5 @@
 // const usersService = require("../user/usersService")
-const usersService = require("./usersService")
+const usersService = require("./loginService")
 const { validationResult } = require('express-validator');
 const { body, param } = require('express-validator');
 const bcrypt = require('bcrypt');

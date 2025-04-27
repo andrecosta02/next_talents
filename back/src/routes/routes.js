@@ -4,12 +4,12 @@ const showdown = require("showdown");
 
 const converter = new showdown.Converter();
 
-const loginRoute = require("./loginRoutes.js")
-const registerRoute = require("./registerRoutes.js")
-// const authRoute = require("./authRoutes.js")
+const studentRoutes = require("./studentRoutes.js")
+const ieRoutes = require("./ieRoutes.js")
+const enterpriseRoutes = require("./enterpriseRoutes.js")
 
-router.use("/login", loginRoute)
-router.use("/register", registerRoute)
-// router.use("/auth", authRoute)
+router.use("/student", studentRoutes)  // Registro - Aluno
+router.use("/ie", ieRoutes)  // Registro - IE
+router.use("/enterprise", enterpriseRoutes)  // Registro - Empesa
 
 module.exports = router

@@ -1,4 +1,4 @@
-const db = require("../db")
+const db = require("../../db")
 let query = ""
 let values = ""
 let returnQry = []
@@ -9,7 +9,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
             query = `SELECT * FROM users WHERE username = ?`
             values = [username]
-            
+
             db.query(query, values, (error, results) => {
                 if (error) { reject(error); return; }
 
