@@ -1,258 +1,146 @@
-const db = require("../../db.js")
-let query = ""
-let values = ""
-let returnQry = []
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+// studentService.js (organizado com todas as funções no module.exports principal)
+
+const db = require("../../db.js");
+let query = "";
+let values = "";
+let returnQry = [];
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 module.exports = {
+    getUserByEmail: (email) => {
+        return new Promise((resolve, reject) => {
+            query = `SELECT * FROM student WHERE email = ?`;
+            values = [email];
 
-    // listAll: () => {
-    //     return new Promise((resolve, reject)=>{
-    //         query = "SELECT * FROM users ORDER BY id"
-
-    //         db.query(query, (error, results)=>{
-    //             if(error) {reject(error); return}
-    //             resolve(results)
-    //         })
-
-    //         consoleResult(query)
-    //     })
-    // },
-
-
-
-    // listOne: (userId) => {
-    //     return new Promise((resolve, reject) => {
-    //         query = `SELECT * FROM users WHERE id = ?`
-    //         values = [userId]
-
-    //         db.query(query, values, (error, results)=>{
-    //             if(error) { reject(error); return; }
-    //             if(results.length > 0){
-    //                 resolve(results[0]);
-    //             }else {
-    //                 resolve(false);
-    //             }
-    //         })
-
-    //         consoleResult(query, values)
-    //     })
-    // },
-
-
+            db.query(query, values, (error, results) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                resolve(results.length > 0 ? results[0] : false);
+            });
+        });
+    },
 
     register: (name, last_name, email, birth, pass, cpf, cep, city) => {
         return new Promise((resolve, reject) => {
-            // let querySelect = " SELECT * FROM users WHERE username = '?' OR email  = '?' OR cpf    = '?'"
-            let querySelect = ""
-
-            querySelect += ` SELECT * `
-            querySelect += ` FROM student `
-            querySelect += ` WHERE `
-            querySelect += `    email    = ? `
-            querySelect += `    OR cpf      = ? `
-            let valueSelect = [email, cpf]
+            let querySelect = `SELECT * FROM student WHERE email = ? OR cpf = ?`;
+            let valueSelect = [email, cpf];
 
             db.query(querySelect, valueSelect, (error, results) => {
-
                 if (results.length == 0) {
-                    query = `INSERT INTO student (name,last_name,email,birth,pass,cpf,cep,city) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
-                    values = [name, last_name, email, birth, pass, cpf, cep, city]
+                    query = `INSERT INTO student (name, last_name, email, birth, pass, cpf, cep, city) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+                    values = [name, last_name, email, birth, pass, cpf, cep, city];
 
                     db.query(query, values, (error, results) => {
                         if (error) {
-                            reject(error)
-                            return
+                            reject(error);
+                            return;
                         }
-                        returnQry = ["1", "OK", `Created student: ${name}`]
-                        returnCode = ""
-                        consoleResult()
-                        resolve(returnQry)
-                        // resolve(results.insertId)
-                    })
+                        returnQry = ["1", "OK", `Created student: ${name}`];
+                        consoleResult();
+                        resolve(returnQry);
+                    });
                 } else {
-                    // returnQry = `There is already a user with a name = ${username}`
-                    returnQry = ["2", "Fail", "User not inserted"]
-                    consoleResult()
-                    resolve(returnQry)
+                    returnQry = ["2", "Fail", "User not inserted"];
+                    consoleResult();
+                    resolve(returnQry);
                 }
-
-            })
-        })
+            });
+        });
     },
 
+    updateStudentById: (userId, updates) => {
+        return new Promise((resolve, reject) => {
+            const fields = Object.keys(updates);
+            const setClause = fields.map(field => `${field} = ?`).join(", ");
+            const values = fields.map(field => updates[field]);
 
+            query = `UPDATE student SET ${setClause} WHERE id = ?`;
+            values.push(userId);
 
-    // update: (clientId, clientName, clientEmail, clientAddress) => {
-    //     return new Promise((resolve, reject) => {
-    //         let query = 'UPDATE client SET ';
-
-    //         const updateFields = [];
-
-    //         if (clientName) { updateFields.push(`name="${clientName}"`) }
-
-    //         if (clientEmail) { updateFields.push(`email="${clientEmail}"`) }
-
-    //         if (clientAddress) { updateFields.push(`address="${clientAddress}"`) }
-
-    //         if (updateFields.length === 0) {
-    //             reject(new Error('Nenhum campo válido para atualização fornecido.'));
-    //             return;
-    //         }
-
-    //         query += updateFields.join(', ');
-    //         query += ` WHERE client_id = "${clientId}"`;
-
-    //         db.query(query, (error, results) => {
-    //             if (error) {
-    //                 reject(error);
-    //                 return;
-    //             }
-
-    //             resolve(results);
-    //         });
-    //         consoleResult(query)
-    //     });
-
-
-    // },
-
-
-
-    // delete: (clientId) =>{
-    //     return new Promise((resolve, reject) => {
-    //         let querySelect = `SELECT * FROM client WHERE client_id = ?`
-    //         let values = [clientId]
-
-    //         db.query(querySelect, values, (error, results) => {
-    //             resolve(results)
-
-    //             if(results != 0){
-    //                 // query = `DELETE FROM client WHERE client_id = ${clientId}`
-    //                 query = `DELETE FROM client WHERE client_id = ${clientId}`
-
-    //                 db.query(query,(error, results) => {
-    //                     if(error) { reject(error); return; }
-    //                     resolve(results)
-    //                 })
-
-    //                 // returnQry = `Deleted client with client_id = ${clientId}`
-    //                 // resolve(returnQry)
-    //                 resolve(query)
-    //                 consoleResult(query)
-    //             } else {
-    //                 returnQry = `No client found with client_id = ${clientId}`
-    //                 reject(returnQry)
-    //                 consoleResult(returnQry)
-    //             }
-    //         })
-
-    //     })
-    // },
-
-}
-
-
-module.exports.saveResetToken = (userId, token, expiresAt) => {
-    return new Promise((resolve, reject) => {
-        query = `
-            INSERT INTO password_resets (user_id, user_type, token, expires_at)
-            VALUES (?, 'student', ?, ?)
-        `;
-        values = [userId, token, expiresAt];
-
-        db.query(query, values, (error, results) => {
-            if (error) {
-                reject(error);
-                return;
-            }
-            consoleResult();
-            resolve(results);
+            db.query(query, values, (error, results) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                consoleResult(query, values);
+                resolve(results);
+            });
         });
-    });
-};
+    },
 
-module.exports.findResetToken = (token) => {
-    return new Promise((resolve, reject) => {
-        query = `
-            SELECT * FROM password_resets
-            WHERE token = ? AND user_type = 'student' AND used = FALSE AND expires_at > NOW()
-        `;
-        values = [token];
+    saveResetToken: (userId, token, expiresAt) => {
+        return new Promise((resolve, reject) => {
+            query = `INSERT INTO password_resets (user_id, user_type, token, expires_at) VALUES (?, 'student', ?, ?)`;
+            values = [userId, token, expiresAt];
 
-        db.query(query, values, (error, results) => {
-            if (error) {
-                reject(error);
-                return;
-            }
-            resolve(results.length > 0 ? results[0] : false);
+            db.query(query, values, (error, results) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                consoleResult();
+                resolve(results);
+            });
         });
-    });
-};
+    },
 
-module.exports.markTokenAsUsed = (tokenId) => {
-    return new Promise((resolve, reject) => {
-        query = `
-            UPDATE password_resets
-            SET used = TRUE
-            WHERE id = ?
-        `;
-        values = [tokenId];
+    findResetToken: (token) => {
+        return new Promise((resolve, reject) => {
+            query = `SELECT * FROM password_resets WHERE token = ? AND user_type = 'student' AND used = FALSE AND expires_at > NOW()`;
+            values = [token];
 
-        db.query(query, values, (error, results) => {
-            if (error) {
-                reject(error);
-                return;
-            }
-            consoleResult();
-            resolve(results);
+            db.query(query, values, (error, results) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                resolve(results.length > 0 ? results[0] : false);
+            });
         });
-    });
-};
+    },
 
-module.exports.updatePassword = (userId, newPasswordHash) => {
-    return new Promise((resolve, reject) => {
-        query = `
-            UPDATE student
-            SET pass = ?
-            WHERE id = ?
-        `;
-        values = [newPasswordHash, userId];
+    markTokenAsUsed: (tokenId) => {
+        return new Promise((resolve, reject) => {
+            query = `UPDATE password_resets SET used = TRUE WHERE id = ?`;
+            values = [tokenId];
 
-        db.query(query, values, (error, results) => {
-            if (error) {
-                reject(error);
-                return;
-            }
-            consoleResult();
-            resolve(results);
+            db.query(query, values, (error, results) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                consoleResult();
+                resolve(results);
+            });
         });
-    });
-};
+    },
 
-module.exports.getUserByEmail = (email) => {
-    return new Promise((resolve, reject) => {
-        query = `SELECT * FROM student WHERE email = ?`;
-        values = [email];
+    updatePassword: (userId, newPasswordHash) => {
+        return new Promise((resolve, reject) => {
+            query = `UPDATE student SET pass = ? WHERE id = ?`;
+            values = [newPasswordHash, userId];
 
-        db.query(query, values, (error, results) => {
-            if (error) {
-                reject(error);
-                return;
-            }
-            resolve(results.length > 0 ? results[0] : false);
+            db.query(query, values, (error, results) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                consoleResult();
+                resolve(results);
+            });
         });
-    });
+    }
 };
 
 function consoleResult() {
-    let date = new Date()
-    const brasilTime = date.toLocaleString('pt-BR', { timeZone: 'America/Recife' });
+    let date = new Date();
+    const brasilTime = date.toLocaleString("pt-BR", { timeZone: "America/Recife" });
 
-    console.log(`Consult {`)
-    console.log(` - ${brasilTime}`)
-    console.log(" - " + query, values)
-
+    console.log(`Consult {`);
+    console.log(` - ${brasilTime}`);
+    console.log(" - " + query, values);
 }

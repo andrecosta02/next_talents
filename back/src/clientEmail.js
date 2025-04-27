@@ -8,7 +8,8 @@ module.exports = {
             service: 'gmail', // SMTP server address
             auth: {
                 user: 'nexttalents2@gmail.com', // SMTP username
-                pass: 'muda aqzy mqim hoht'  // SMTP password
+                // pass: 'muda aqzy mqim hoht'  // SMTP password
+                pass: process.env.GMAIL_APP  // SMTP password
             },
         })
 

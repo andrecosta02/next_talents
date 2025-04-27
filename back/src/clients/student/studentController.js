@@ -13,7 +13,35 @@ const fullDate = `${date.getFullYear()}${(date.getMonth() + 1).toString().padSta
 module.exports = {
 
     login: async (req, res) => {
+        const { email, pass } = req.body;
 
+        if (!email || !pass) {
+            return res.status(400).json({ message: "Email e senha são obrigatórios." });
+        }
+
+        try {
+            const user = await registerService.getUserByEmail(email);
+
+            if (!user) {
+                return res.status(401).json({ message: "E-mail ou senha inválidos." });
+            }
+
+            const passwordMatch = await bcrypt.compare(pass, user.pass);
+
+            if (!passwordMatch) {
+                return res.status(401).json({ message: "E-mail ou senha inválidos." });
+            }
+
+            const token = jwt.sign({ id: user.id, type: "student" }, SECRET, { expiresIn: "2h" });
+
+            res.status(200).json({
+                message: "Login realizado com sucesso!",
+                token: token
+            });
+        } catch (error) {
+            console.error("Erro no login:", error);
+            res.status(500).json({ message: "Erro interno no servidor." });
+        }
     },
 
     register: async (req, res) => {
@@ -32,14 +60,6 @@ module.exports = {
         const city = req.body.city
 
         json.result = [name, last_name, email, birth, pass, cpf, cep, city]
-
-        let emailTitle = "Cadastro na plataforma Next Talents"
-        let emailText = "Olá, " + name + " " + last_name + ",\n\n" +
-            "Obrigado por se cadastrar na plataforma Next Talents!\n\n" +
-            "Estamos felizes em tê-lo(a) conosco.\n\n"
-        const enviouEmail = clientEmail.envEmail(email, emailTitle, emailText)
-        console.log(enviouEmail)
-
 
         const registerValidation = [
             body('name')
@@ -114,6 +134,14 @@ module.exports = {
             json.statusCode = 201
             json.message = returnQry
             json.result = ""
+
+            let emailTitle = "Cadastro na plataforma Next Talents"
+            let emailText = "Olá, " + name + " " + last_name + ",\n\n" +
+                "Obrigado por se cadastrar na plataforma Next Talents!\n\n" +
+                "Estamos felizes em tê-lo(a) conosco.\n\n"
+            const enviouEmail = clientEmail.envEmail(email, emailTitle, emailText)
+            console.log(enviouEmail)
+            
         } else {
             res.status(422)
             json.statusCode = 422
@@ -126,7 +154,27 @@ module.exports = {
     },
 
     update: async (req, res) => {
+        const userId = req.user.id; // Pegando o id do usuário autenticado via middleware
+        const allowedFields = ["name", "last_name", "email", "cep", "city", "notification_email", "notification_vacancies", "notification_course", "darkmode"];
+        const updates = {};
 
+        allowedFields.forEach(field => {
+            if (req.body[field] !== undefined) {
+                updates[field] = req.body[field];
+            }
+        });
+
+        if (Object.keys(updates).length === 0) {
+            return res.status(400).json({ message: "Nenhum campo válido para atualizar." });
+        }
+
+        try {
+            const result = await registerService.updateStudentById(userId, updates);
+            res.status(200).json({ message: "Dados atualizados com sucesso!", result });
+        } catch (error) {
+            console.error("Erro ao atualizar dados:", error);
+            res.status(500).json({ message: "Erro interno no servidor." });
+        }
     },
 
     forgotPass: async (req, res) => {
