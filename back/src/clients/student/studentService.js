@@ -133,7 +133,70 @@ module.exports = {
                 resolve(results);
             });
         });
-    }
+    },
+
+    saveActivationToken: (userId, token, expiresAt) => {
+        return new Promise((resolve, reject) => {
+            query = `INSERT INTO activation_tokens (user_id, user_type, token, expires_at) VALUES (?, 'student', ?, ?)`;
+            values = [userId, token, expiresAt];
+    
+            db.query(query, values, (error, results) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                consoleResult();
+                resolve(results);
+            });
+        });
+    },
+    
+    findActivationToken: (token) => {
+        return new Promise((resolve, reject) => {
+            query = `SELECT * FROM activation_tokens WHERE token = ? AND user_type = 'student' AND used = FALSE AND expires_at > NOW()`;
+            values = [token];
+    
+            db.query(query, values, (error, results) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                resolve(results.length > 0 ? results[0] : false);
+            });
+        });
+    },
+    
+    markActivationTokenAsUsed: (tokenId) => {
+        return new Promise((resolve, reject) => {
+            query = `UPDATE activation_tokens SET used = TRUE WHERE id = ?`;
+            values = [tokenId];
+    
+            db.query(query, values, (error, results) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                consoleResult();
+                resolve(results);
+            });
+        });
+    },
+    
+    activateStudentById: (id) => {
+        return new Promise((resolve, reject) => {
+            query = `UPDATE student SET is_active = TRUE WHERE id = ?`;
+            values = [id];
+    
+            db.query(query, values, (error, results) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                consoleResult();
+                resolve(results);
+            });
+        });
+    },
 };
 
 function consoleResult() {
