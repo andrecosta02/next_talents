@@ -39,7 +39,13 @@ module.exports = {
                             reject(error);
                             return;
                         }
-                        returnQry = ["1", "OK", `Created student: ${name}`];
+                        // returnQry = ["1", "OK", `Created student: ${name}`];
+                        returnQry = {
+                            code: "1",
+                            message: "OK",
+                            userId: results.insertId, // ID do novo aluno
+                            description: `Created student: ${name}`
+                        };
                         consoleResult();
                         resolve(returnQry);
                     });

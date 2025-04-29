@@ -32,6 +32,10 @@ module.exports = {
                 return res.status(401).json({ message: "E-mail ou senha inválidos." });
             }
 
+            if (!user.is_active) {
+                return res.status(403).json({ message: "Conta não ativada. Verifique seu e-mail para confirmar o cadastro." });
+            }
+
             const token = jwt.sign({ id: user.id, type: "student" }, SECRET, { expiresIn: "2h" });
 
             res.status(200).json({
@@ -125,28 +129,34 @@ module.exports = {
             // console.log(hash_psw)
         }
 
-
-        const returnQry = await registerService.register(name, last_name, email, birth, hash_psw, cpf, cep, city)
-        codeReturn = returnQry[0] // 1 = OK, 2 = User Not Fount
+        const returnQry = await registerService.register(name, last_name, email, birth, hash_psw, cpf, cep, city);
+        const codeReturn = returnQry.code; // 1 = OK, 2 = User Not Found
 
         if (codeReturn == "1") {
-            res.status(201)
-            json.statusCode = 201
-            json.message = returnQry
-            json.result = ""
+            res.status(201);
+            json.statusCode = 201;
+            json.message = returnQry.message;  // <- agora pega o "message" certo
+            json.result = returnQry.description;  // <- agora pega a descrição certa
 
-            let emailTitle = "Cadastro na plataforma Next Talents"
-            let emailText = "Olá, " + name + " " + last_name + ",\n\n" +
+            // Gerar token de ativação
+            const token = jwt.sign({ id: returnQry.userId, type: "student" }, SECRET, { expiresIn: "24h" });
+            const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 horas
+        
+            await registerService.saveActivationToken(returnQry.userId, token, expiresAt);
+        
+            let emailTitle = "Confirmação de Cadastro - Next Talents";
+            let emailText = `Olá, ${name} ${last_name},\n\n` +
                 "Obrigado por se cadastrar na plataforma Next Talents!\n\n" +
-                "Estamos felizes em tê-lo(a) conosco.\n\n"
-            const enviouEmail = clientEmail.envEmail(email, emailTitle, emailText)
-            console.log(enviouEmail)
-            
+                "Para ativar seu cadastro, clique no link abaixo:\n" +
+                `https://seusite.com/confirm-email?token=${token}\n\n` +
+                "Esse link é válido por 24 horas.";
+        
+            await clientEmail.envEmail(email, emailTitle, emailText);
         } else {
-            res.status(422)
-            json.statusCode = 422
-            json.message = returnQry
-            json.result = ""
+            res.status(422);
+            json.statusCode = 422;
+            json.message = returnQry[1];  // ainda puxando do vetor antigo (como está seu service)
+            json.result = "";
         }
 
         res.json(json);
@@ -200,7 +210,7 @@ module.exports = {
     
         await clientEmail.envEmail(email, emailTitle, emailText);
     
-        res.status(200).json({ message: "If this email exists, a reset link has been sent.", token });
+        res.status(200).json({ message: "If this email exists, a reset link has been sent." });
     },
 
     resetPass: async (req, res) => {
@@ -221,6 +231,32 @@ module.exports = {
             res.status(200).json({ message: "Password updated successfully!" });
         } catch (error) {
             res.status(400).json({ message: "Invalid or expired token." });
+        }
+    },
+
+    confirmEmail: async (req, res) => {
+        const { token } = req.body;  // ou pode pegar via query: req.query.token, você escolhe
+    
+        if (!token) {
+            return res.status(400).json({ message: "Token não fornecido." });
+        }
+    
+        try {
+            const decoded = jwt.verify(token, SECRET);
+            const tokenData = await registerService.findActivationToken(token);
+    
+            if (!tokenData) {
+                return res.status(400).json({ message: "Token inválido ou expirado." });
+            }
+    
+            // Ativando o usuário
+            await registerService.activateStudentById(tokenData.user_id);
+            await registerService.markActivationTokenAsUsed(tokenData.id);
+    
+            res.status(200).json({ message: "Cadastro ativado com sucesso!" });
+        } catch (error) {
+            console.error("Erro na ativação de cadastro:", error);
+            res.status(400).json({ message: "Token inválido ou expirado." });
         }
     },
 
