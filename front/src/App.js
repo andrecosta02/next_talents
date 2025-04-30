@@ -1,5 +1,5 @@
 import React from 'react';
-import TelaInicio from './pages/TelaInicio';
+import TelaInicio from './pages/telaInicio/TelaInicio';
 
 function App() {
   return (
