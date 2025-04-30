@@ -148,7 +148,7 @@ module.exports = {
             let emailText = `Olá, ${name} ${last_name},\n\n` +
                 "Obrigado por se cadastrar na plataforma Next Talents!\n\n" +
                 "Para ativar seu cadastro, clique no link abaixo:\n" +
-                `https://seusite.com/confirm-email?token=${token}\n\n` +
+                `localhost:8080/confirma-email?token=${token}\n\n` +
                 "Esse link é válido por 24 horas.";
         
             await clientEmail.envEmail(email, emailTitle, emailText);
