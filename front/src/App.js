@@ -1,11 +1,19 @@
 import React from 'react';
-import TelaInicio from './pages/telaInicio/TelaInicio';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import TelaInicio from './pages/aluno/telaInicio/TelaInicio';
+import Register from './pages/aluno/telaCadastro/Register';
 
 function App() {
   return (
-    <div>
-      <TelaInicio />
-    </div>
+    // <div>
+    //   <TelaInicio />
+    // </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<TelaInicio />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
+    </Router>
   );
 }
 

@@ -1,7 +1,10 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import "./TelaInicio.css";
 
 export default function TelaInicio() {
+  const navigate = useNavigate();
+
   return (
     <div className="container">
       <header className="header">
@@ -15,7 +18,7 @@ export default function TelaInicio() {
         </p>
 
         <div className="cards">
-          <div className="card">
+          <div className="card" onClick={() => navigate("/register")} style={{ cursor: "pointer" }}>
             <img src="/aluno.png" alt="Aluno" className="card-image" />
             <span className="card-title">Aluno</span>
           </div>

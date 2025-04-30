@@ -2,100 +2,144 @@
 CREATE DATABASE next_talents;
 USE next_talents;
 
--- Tabela: Aluno
-CREATE TABLE Aluno (
+-- Tabela: student
+CREATE TABLE student (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    nome VARCHAR(256),
-    email VARCHAR(256),
-    data_nascimento DATE,
-    pass VARCHAR(256),
-    cgc VARCHAR(11),
-    notifica_email BOOLEAN,
-    notifica_vagas BOOLEAN,
-    notifica_cursos BOOLEAN,
-    darkmode BOOLEAN
+    name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
+    email VARCHAR(256) NOT NULL UNIQUE,
+    birth DATE,
+    pass VARCHAR(256) NOT NULL,
+    cpf VARCHAR(11) UNIQUE,
+    cep VARCHAR(20),
+    city VARCHAR(255),
+    notification_email BOOLEAN DEFAULT FALSE,
+    notification_vacancies BOOLEAN DEFAULT FALSE,
+    notification_course BOOLEAN DEFAULT FALSE,
+    darkmode BOOLEAN DEFAULT FALSE,
+    is_active BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 -- Tabela: IE (Instituição de Ensino)
-CREATE TABLE IE (
+CREATE TABLE ie (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    nome VARCHAR(256),
-    unidade VARCHAR(256),
-    email VARCHAR(256),
-    pass VARCHAR(256),
-    cgc VARCHAR(11),
-    notifica_email BOOLEAN,
-    darkmode BOOLEAN
+    nome VARCHAR(256) NOT NULL,
+    unit VARCHAR(256),
+    email VARCHAR(256) NOT NULL UNIQUE,
+    pass VARCHAR(256) NOT NULL,
+    cgc VARCHAR(11) UNIQUE,
+    notification_email BOOLEAN DEFAULT FALSE,
+    darkmode BOOLEAN DEFAULT FALSE,
+    is_active BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- Tabela: EMPRESA
-CREATE TABLE EMPRESA (
+-- Tabela: enterprise
+CREATE TABLE enterprise (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    nome VARCHAR(256),
-    unidade VARCHAR(256),
-    email VARCHAR(256),
-    pass VARCHAR(256),
-    cgc VARCHAR(11),
-    notifica_email BOOLEAN,
-    darkmode BOOLEAN
+    nome VARCHAR(256) NOT NULL,
+    unit VARCHAR(256),
+    email VARCHAR(256) NOT NULL UNIQUE,
+    pass VARCHAR(256) NOT NULL,
+    cgc VARCHAR(11) UNIQUE,
+    notification_email BOOLEAN DEFAULT FALSE,
+    darkmode BOOLEAN DEFAULT FALSE,
+    is_active BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- Tabela: Cursos Disponíveis
-CREATE TABLE Cursos_Disponiveis (
+-- Tabela: courses
+CREATE TABLE courses (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    id_ie INT,
-    titulo VARCHAR(256),
-    descricao VARCHAR(256),
+    id_ie_enterprise INT NOT NULL,
+    title VARCHAR(256) NOT NULL,
+    description VARCHAR(256),
     link VARCHAR(256),
-    data_limite DATE,
-    ativo BOOLEAN,
-    FOREIGN KEY (id_ie) REFERENCES IE(id)
+    deadline DATE,
+    active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_ie) REFERENCES ie(id)
 );
 
--- Tabela: Cursos do Aluno
-CREATE TABLE Cursos_do_Aluno (
+-- Tabela: courses_student
+CREATE TABLE courses_student (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    id_aluno INT,
-    id_curso INT,
-    data_inicio DATE,
-    data_conclusao DATE,
-    horas_realizadas VARCHAR(5),
-    parceria BOOLEAN,
-    FOREIGN KEY (id_aluno) REFERENCES Aluno(id),
-    FOREIGN KEY (id_curso) REFERENCES Cursos_Disponiveis(id)
+    id_student INT NOT NULL,
+    id_course INT NOT NULL,
+    start_date DATE,
+    completion_date DATE,
+    hours_performed VARCHAR(5),
+    id_partnership INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_partnership) REFERENCES enterprise(id),
+    FOREIGN KEY (id_student) REFERENCES student(id),
+    FOREIGN KEY (id_course) REFERENCES courses(id)
 );
 
--- Tabela: Certificados
-CREATE TABLE Certificados (
+-- Tabela: certificates
+CREATE TABLE certificates (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    id_aluno INT,
-    id_curso INT,
-    horas VARCHAR(5),
-    data DATE,
+    id_student INT NOT NULL,
+    id_course INT NOT NULL,
+    hours VARCHAR(5),
+    date DATE,
     img VARCHAR(256),
-    FOREIGN KEY (id_aluno) REFERENCES Aluno(id),
-    FOREIGN KEY (id_curso) REFERENCES Cursos_Disponiveis(id)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_student) REFERENCES student(id),
+    FOREIGN KEY (id_course) REFERENCES courses(id)
 );
 
--- Tabela: Vagas
-CREATE TABLE Vagas (
+-- Tabela: vacancies
+CREATE TABLE vacancies (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    id_empresa INT,
-    titulo VARCHAR(256),
-    descricao VARCHAR(256),
-    data_inicio DATE,
-    data_fim DATE,
-    quantidade INT,
-    ativo BOOLEAN,
-    FOREIGN KEY (id_empresa) REFERENCES EMPRESA(id)
+    id_enterprise INT NOT NULL,
+    title VARCHAR(256) NOT NULL,
+    description VARCHAR(256),
+    start_date DATE,
+    end_date DATE,
+    quantity INT DEFAULT 1,
+    active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_enterprise) REFERENCES enterprise(id)
 );
 
--- Tabela: alunos_inscritos
-CREATE TABLE alunos_inscritos (
+-- Tabela: students_registered
+CREATE TABLE students_registered (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    id_aluno INT,
-    id_vaga INT,
-    data DATE,
-    FOREIGN KEY (id_aluno) REFERENCES Aluno(id),
-    FOREIGN KEY (id_vaga) REFERENCES Vagas(id)
+    id_student INT NOT NULL,
+    id_vacancy INT NOT NULL,
+    date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_student) REFERENCES student(id),
+    FOREIGN KEY (id_vacancy) REFERENCES vacancies(id)
 );
+
+CREATE TABLE password_resets (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    user_type ENUM('student', 'enterprise', 'ie') NOT NULL,
+    token VARCHAR(512) NOT NULL,
+    expires_at DATETIME NOT NULL,
+    used BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE activation_tokens (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    user_type ENUM('student', 'enterprise', 'ie') NOT NULL,
+    token VARCHAR(512) NOT NULL,
+    expires_at DATETIME NOT NULL,
+    used BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
