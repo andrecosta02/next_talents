@@ -18,7 +18,7 @@ export default function TelaInicio() {
         </p>
 
         <div className="cards">
-          <div className="card" onClick={() => navigate("/register")} style={{ cursor: "pointer" }}>
+          <div className="card" onClick={() => navigate("/login")} style={{ cursor: "pointer" }}>
             <img src="/aluno.png" alt="Aluno" className="card-image" />
             <span className="card-title">Aluno</span>
           </div>
