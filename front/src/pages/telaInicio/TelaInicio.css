@@ -6,8 +6,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-image: url('../../public/fundo.png');
-  background-repeat: repeat;
+  /* background-image: url('../../public/fundo.png'); */
+  /* background-repeat: repeat; */
 }
 
 .header {
@@ -16,8 +16,8 @@
   padding: 1rem;
   display: flex;
   align-items: center;
-  background-image: url('../../public/fundo.png');
-  background-repeat: repeat;
+  /* background-image: url('../../public/fundo.png'); */
+  /* background-repeat: repeat; */
 }
 
 .logo {
@@ -33,7 +33,7 @@
 
 .main {
   background-color: #9ae6b4;
-  width: 100%;
+  width: 97%;
   padding: 2rem;
   border-radius: 0.5rem;
   margin-top: 2rem;

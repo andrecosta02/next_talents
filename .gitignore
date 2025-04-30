@@ -1,4 +1,6 @@
 .vscode
 back/node_modules
 back/variable.env
+back/.env
 
+front/node_modules
