@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import TelaInicio from './pages/aluno/telaInicio/TelaInicio';
 import Register from './pages/aluno/telaCadastro/Register';
-import TelaLogin from './pages/telaLogin/LoginPage';
+import TelaLogin from './pages/aluno/telaLogin/LoginPage';
 
 function App() {
   return (

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import './LoginPage.css';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [mensagem, setMensagem] = useState('');
-
+  const navigate = useNavigate();
   const handleLogin = async () => {
     try {
       const response = await fetch('https://suaapi.com/login', {
@@ -29,8 +30,10 @@ const LoginPage = () => {
 
   return (
     <div className="login-container">
-      <div className="login-box">
+      <header className="header">
         <img src="/logo-nex-talents.png" alt="Nex.Talents" className="logo" />
+      </header>
+      <div className="login-box">
         <h2>Login</h2>
         <label>Email:</label>
         <input
@@ -47,7 +50,9 @@ const LoginPage = () => {
           onChange={(e) => setSenha(e.target.value)}
         />
         <button onClick={handleLogin}>Acessar</button>
+        <div className="cadastro" onClick={() => navigate("/register")} style={{ cursor: "pointer" }}>
         <p className="cadastro">Não possui login?</p>
+          </div>
         <p className="esqueciSenha">Esqueceu a senha?</p>
         {mensagem && <p className="mensagem">{mensagem}</p>}
       </div>

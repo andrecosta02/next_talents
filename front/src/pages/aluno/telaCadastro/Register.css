@@ -8,7 +8,7 @@
   }
   
   .register-form {
-    background: #fff;
+    background-color:#4aa382;
     padding: 40px 30px;
     border-radius: 12px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -21,7 +21,7 @@
   .register-form h2 {
     text-align: center;
     margin-bottom: 20px;
-    color: #2d3e50;
+    color: #ffffff;
   }
   
   .register-form input {
