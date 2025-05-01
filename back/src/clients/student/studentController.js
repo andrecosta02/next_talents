@@ -67,62 +67,63 @@ module.exports = {
 
         const registerValidation = [
             body('name')
-                .notEmpty().withMessage('name cannot be empty')
-                .isString().withMessage('name must be a string')
-                .isLength({ min: 3, max: 60 }).withMessage('name must be between 3 and 60 characters'),
-
+                .notEmpty().withMessage('O nome não pode estar vazio')
+                .isString().withMessage('O nome deve ser uma string')
+                .isLength({ min: 3, max: 60 }).withMessage('O nome deve ter entre 3 e 60 caracteres'),
+        
             body('last_name')
-                .notEmpty().withMessage('last_name cannot be empty')
-                .isString().withMessage('last_name must be a string')
-                .isLength({ min: 3, max: 60 }).withMessage('last_name must be between 3 and 60 characters'),
-
+                .notEmpty().withMessage('O sobrenome não pode estar vazio')
+                .isString().withMessage('O sobrenome deve ser uma string')
+                .isLength({ min: 3, max: 60 }).withMessage('O sobrenome deve ter entre 3 e 60 caracteres'),
+        
             body('email')
-                .notEmpty().withMessage('email cannot be empty')
-                .isString().withMessage('email must be a string')
-                .isEmail().withMessage('email must be a valid email address')
-                .isLength({ min: 3, max: 60 }).withMessage('email must be between 3 and 60 characters'),
-
+                .notEmpty().withMessage('O e-mail não pode estar vazio')
+                .isString().withMessage('O e-mail deve ser uma string')
+                .isEmail().withMessage('O e-mail deve ser um endereço de e-mail válido')
+                .isLength({ min: 3, max: 60 }).withMessage('O e-mail deve ter entre 3 e 60 caracteres'),
+        
             body('birth')
-                .notEmpty().withMessage('birth cannot be empty')
-                .isString().withMessage('birth must be a string')
-                .matches(/^\d{8}$/).withMessage('birth must be in the format AAAAMMDD')
+                .notEmpty().withMessage('A data de nascimento não pode estar vazia')
+                .isString().withMessage('A data de nascimento deve ser uma string')
+                .matches(/^\d{8}$/).withMessage('A data de nascimento deve estar no formato AAAAMMDD')
                 .custom((value) => {
                     if (isAdult(value) < 18) {
-                        throw new Error('User must be at least 18 years old');
+                        throw new Error('O usuário deve ter pelo menos 18 anos');
                     }
                     return true;
                 }),
-
+        
             body('pass')
-                .notEmpty().withMessage('pass cannot be empty')
-                .isString().withMessage('pass must be a string')
-                .isLength({ min: 8 }).withMessage('pass must be at least 8 characters long')
-                .matches(/[!@#$%^&*(),.?":{}|<>]/).withMessage('pass must contain at least one special character'),
-
+                .notEmpty().withMessage('A senha não pode estar vazia')
+                .isString().withMessage('A senha deve ser uma string')
+                .isLength({ min: 8 }).withMessage('A senha deve ter no mínimo 8 caracteres')
+                .matches(/[!@#$%^&*(),.?":{}|<>]/).withMessage('A senha deve conter ao menos um caractere especial'),
+        
             body('cpf')
-                .notEmpty().withMessage('cpf cannot be empty')
-                .isString().withMessage('cpf must be a string')
-                .isLength({ min: 11, max: 11 }).withMessage('cpf must be 11 characters')
-                .matches(/^\d+$/).withMessage('CPF must contain only numbers'),
-
+                .notEmpty().withMessage('O CPF não pode estar vazio')
+                .isString().withMessage('O CPF deve ser uma string')
+                .isLength({ min: 11, max: 11 }).withMessage('O CPF deve conter 11 caracteres')
+                .matches(/^\d+$/).withMessage('O CPF deve conter apenas números'),
+        
             body('cep')
-                .notEmpty().withMessage('cep cannot be empty')
-                .isString().withMessage('cep must be a string')
-                .isLength({ min: 8, max: 8 }).withMessage('CEP must be exactly 8 characters long')
-                .matches(/^\d+$/).withMessage('CEP must contain only numbers'),
-
+                .notEmpty().withMessage('O CEP não pode estar vazio')
+                .isString().withMessage('O CEP deve ser uma string')
+                .isLength({ min: 8, max: 8 }).withMessage('O CEP deve conter exatamente 8 caracteres')
+                .matches(/^\d+$/).withMessage('O CEP deve conter apenas números'),
+        
             body('city')
-                .notEmpty().withMessage('City is required')
-                .isLength({ min: 2, max: 100 }).withMessage('City must be between 2 and 100 characters long')
-                .matches(/^[a-zA-Z\s]+$/).withMessage('City must contain only letters and spaces')
+                .notEmpty().withMessage('A cidade é obrigatória')
+                .isLength({ min: 2, max: 100 }).withMessage('A cidade deve ter entre 2 e 100 caracteres')
+                .matches(/^[a-zA-Z\s]+$/).withMessage('A cidade deve conter apenas letras e espaços')
         ];
+        
 
         await Promise.all(registerValidation.map(validation => validation.run(req)))
 
         const errors = validationResult(req)
 
         if (!errors.isEmpty()) {
-            res.status(422).json({ statusCode: 400, message: 'Erro de validação', errors: errors.array() })
+            res.status(422).json({ statusCode: 422, message: 'Erro de validação', errors: errors.array() })
             return
         } else {
             hash_psw = await hashPassword(pass);
@@ -157,6 +158,11 @@ module.exports = {
             json.statusCode = 422;
             json.message = returnQry[1];  // ainda puxando do vetor antigo (como está seu service)
             json.result = "";
+            json.errors = [
+                {
+                    msg: returnQry[1]
+                }
+            ];
         }
 
         res.json(json);

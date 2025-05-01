@@ -39,7 +39,6 @@ module.exports = {
                             reject(error);
                             return;
                         }
-                        // returnQry = ["1", "OK", `Created student: ${name}`];
                         returnQry = {
                             code: "1",
                             message: "OK",
@@ -50,7 +49,7 @@ module.exports = {
                         resolve(returnQry);
                     });
                 } else {
-                    returnQry = ["2", "Fail", "User not inserted"];
+                    returnQry = ["2", "Email já cadastrado, se necessario, redefina a senha"];
                     consoleResult();
                     resolve(returnQry);
                 }
