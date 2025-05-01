@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import InputMask from "react-input-mask";
 import { useNavigate } from "react-router-dom";
+import PopupMessage from "../../../components/PopupMessage";
+
 import "./Register.css";
 
 const Register = () => {
@@ -16,6 +18,9 @@ const Register = () => {
     cep: "",
     city: ""
   });
+
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupType, setPopupType] = useState("success"); // ou "error"
 
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -51,7 +56,11 @@ const Register = () => {
     setError("");
 
     if (formData.pass !== formData.confirmPass) {
-      setError("As senhas não coincidem.");
+      // setError("As senhas não coincidem.");
+      setPopupType("error");
+      setMessage("As senhas não coincidem.");
+      setShowPopup(true);
+      setTimeout(() => setShowPopup(false), 10000);
       return;
     }
 
@@ -78,16 +87,32 @@ const Register = () => {
       const data = await res.json();
       console.log(data);
 
+
       if (res.status === 201) {
+        setPopupType("success");
         setMessage("Cadastro realizado com sucesso!");
-        setTimeout(() => navigate("/login"), 2000);
-      } else if (res.status === 400 && data.errors) {
-        setError(data.errors[0].msg);
+        setShowPopup(true);
+        setTimeout(() => {
+          setShowPopup(false);
+          navigate("/login");
+        }, 5000);
+      } else if (res.status === 422 && data.errors) {
+        setPopupType("error");
+        setMessage(data.errors[0].msg);
+        setShowPopup(true);
+        setTimeout(() => setShowPopup(false), 10000);
       } else {
-        setError("Erro ao cadastrar. Verifique os dados e tente novamente.");
+        setPopupType("error");
+        setMessage("Erro ao cadastrar. Verifique os dados e tente novamente.");
+        setShowPopup(true);
+        setTimeout(() => setShowPopup(false), 10000);
       }
     } catch (err) {
-      setError("Erro de conexão com o servidor.");
+      // setError("Erro de conexão com o servidor.");
+      setPopupType("error");
+      setMessage("Erro de conexão com o servidor.");
+      setShowPopup(true);
+      setTimeout(() => setShowPopup(false), 10000);
     }
   };
 
@@ -184,6 +209,13 @@ const Register = () => {
         <div className="button-row">
           <button type="button" onClick={clearForm}>Limpar</button>
           <button type="submit">Cadastrar</button>
+
+          <PopupMessage
+            type={popupType}
+            message={message}
+            onClose={() => setShowPopup(false)}
+          />
+
         </div>
       </form>
     </div>
