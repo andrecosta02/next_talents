@@ -20,7 +20,7 @@ export default function ConfirmEmail() {
 
     console.log(JSON.stringify({ token }))
 
-    fetch("http://localhost:3000/nexttalents/student/confirm-email", {
+    fetch("http://localhost:8080/nexttalents/student/confirm-email", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ token })

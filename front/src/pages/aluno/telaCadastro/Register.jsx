@@ -56,7 +56,6 @@ const Register = () => {
     setError("");
 
     if (formData.pass !== formData.confirmPass) {
-      // setError("As senhas não coincidem.");
       setPopupType("error");
       setMessage("As senhas não coincidem.");
       setShowPopup(true);
@@ -87,15 +86,14 @@ const Register = () => {
       const data = await res.json();
       console.log(data);
 
-
       if (res.status === 201) {
         setPopupType("success");
-        setMessage("Cadastro realizado com sucesso!");
+        setMessage("Cadastro realizado, confirme o acesso no seu email!");
         setShowPopup(true);
         setTimeout(() => {
           setShowPopup(false);
           navigate("/login");
-        }, 5000);
+        }, 8000);
       } else if (res.status === 422 && data.errors) {
         setPopupType("error");
         setMessage(data.errors[0].msg);

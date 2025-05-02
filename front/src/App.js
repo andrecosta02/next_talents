@@ -5,7 +5,7 @@ import Register from './pages/aluno/telaCadastro/Register';
 import TelaLogin from './pages/aluno/telaLogin/LoginPage';
 import ConfirmaEmail from './pages/aluno/confirmaEmail/confirmaEmail';
 import NovaSenhaPage from './pages/aluno/novaSenha/novaSenhaPage';
-
+import Dashboard from './pages/aluno/dashboard/dashboard';
 
 function App() {
   return (
@@ -14,9 +14,9 @@ function App() {
         <Route path="/" element={<TelaInicio />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<TelaLogin />} />
+        <Route path="/reset-senha" element={<NovaSenhaPage />} />
         <Route path="/confirma-email" element={<ConfirmaEmail />} />
-        <Route path="/novaSenha" element={<NovaSenhaPage />} />
-
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </Router>
   );

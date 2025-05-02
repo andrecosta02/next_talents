@@ -25,10 +25,11 @@ const NovaSenhaPage = () => {
     }
 
     try {
+      let newPassword = senha
       const response = await fetch('http://localhost:8080/nexttalents/student/reset-pass', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, senha }),
+        body: JSON.stringify({ token, newPassword }),
       });
 
       const data = await response.json();

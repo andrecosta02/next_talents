@@ -16,9 +16,11 @@ module.exports = {
 
             db.query(query, values, (error, results) => {
                 if (error) {
+                    consoleResult();
                     reject(error);
                     return;
                 }
+                consoleResult();
                 resolve(results.length > 0 ? results[0] : false);
             });
         });
