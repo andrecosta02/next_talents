@@ -8,7 +8,7 @@ export default function TelaInicio() {
   return (
     <div className="container">
       <header className="header">
-        <img src="/logo-nex-talents.png" alt="Nex.Talents Logo" className="logo" />
+        <img src="/logo-nextTalents.png" alt="Nex.Talents Logo" className="logo" />
       </header>
 
       <main className="main">

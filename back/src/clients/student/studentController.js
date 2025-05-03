@@ -82,7 +82,7 @@ module.exports = {
                 // return res.status(403).json({ message: "Conta não ativada. Verifique seu e-mail para confirmar o cadastro." });
             }
 
-            const token = jwt.sign({ id: user.id, type: "student" }, SECRET, { expiresIn: "2h" });
+            const token = jwt.sign({ id: user.id, name: user.name, type: "student" }, SECRET, { expiresIn: "2h" });
 
             res.status(200).json({
                 message: "Login realizado com sucesso!",

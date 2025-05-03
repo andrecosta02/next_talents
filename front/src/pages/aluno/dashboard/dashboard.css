@@ -1,19 +1,148 @@
+
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #e0f0e9;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f5f7f9;
+  overflow-x: hidden;
 }
-  
-.login-container {
-display: flex;
-justify-content: center;
-align-items: center;
-height: 100vh;
-background-color: #ffffff;
-background-image: url('https://www.transparenttextures.com/patterns/connected.png');
+
+header > img {
+    margin-left: 60px;
+}
+
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 10px 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  z-index: 1001;
+  position: relative;
+}
+
+.dashboard-logo {
+  height: 35px;
+}
+
+.dashboard-actions {
+  display: flex;
+  align-items: center;
+}
+
+.dashboard-actions button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  margin-left: 12px;
+  cursor: pointer;
+  color: #333;
+}
+
+.dashboard-body {
+  display: flex;
+  flex: 1;
+}
+
+.dashboard-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 60px;
+  height: 100%;
+  background-color: #ffffff;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.08);
+  padding-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1002;
+  transition: width 0.3s ease;
+  /* margin: 0px 0; */
+}
+
+.dashboard-menu.open {
+  width: 220px;
+  align-items: flex-start;
+}
+
+.menu-toggle {
+  position: absolute;
+  top: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 15px;
+  transition: background 0.2s;
+}
+
+.dashboard-menu .menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  /* padding: 10px 15px; */
+  padding: 10px 15px;
+  border: none;
+  background: none;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  color: #333;
+  transition: background 0.2s;
+}
+
+.dashboard-menu .menu-item:hover {
+    /* background-color: #f0f0f0; */
+    background-color: #68a58f;
+    transition: background 0.5s;
+}
+
+.dashboard-menu .icon {
+  font-size: 18px;
+  text-align: center;
+  width: 20px;
+}
+
+.dashboard-menu:not(.open) .text {
+  display: none;
+}
+
+.dashboard-content {
+  flex: 1;
+  margin-left: 60px;
+  padding: 30px 20px;
+  transition: margin-left 0.3s ease;
+}
+
+.dashboard-menu.open ~ .dashboard-content {
+  margin-left: 220px;
 }
 
 h2 {
-    color: rgb(0, 0, 0);
-    text-align: center;
+  color: #222;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+  .dashboard-menu {
+    width: 200px;
+  }
+
+  .dashboard-menu.open ~ .dashboard-content {
+    margin-left: 200px;
+  }
 }

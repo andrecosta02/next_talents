@@ -51,7 +51,7 @@ module.exports = {
                         resolve(returnQry);
                     });
                 } else {
-                    returnQry = ["2", "Email já cadastrado, se necessario, redefina a senha"];
+                    returnQry = ["2", "Email ou CPF já cadastrado, se necessário, redefina a senha"];
                     consoleResult();
                     resolve(returnQry);
                 }

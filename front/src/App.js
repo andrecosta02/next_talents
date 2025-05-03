@@ -6,6 +6,7 @@ import TelaLogin from './pages/aluno/telaLogin/LoginPage';
 import ConfirmaEmail from './pages/aluno/confirmaEmail/confirmaEmail';
 import NovaSenhaPage from './pages/aluno/novaSenha/novaSenhaPage';
 import Dashboard from './pages/aluno/dashboard/dashboard';
+import PrivateRoute from './routes/PrivateRoute';
 
 function App() {
   return (
@@ -16,7 +17,15 @@ function App() {
         <Route path="/login" element={<TelaLogin />} />
         <Route path="/reset-senha" element={<NovaSenhaPage />} />
         <Route path="/confirma-email" element={<ConfirmaEmail />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        {/* <Route path="/dashboard" element={<Dashboard />} /> */}
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </Router>
   );

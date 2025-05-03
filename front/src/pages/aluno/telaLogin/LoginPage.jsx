@@ -72,7 +72,7 @@ const LoginPage = () => {
       }
     } catch (err) {
       // setMensagem('Erro de conexão com o servidor.');
-      
+
       setPopupType("error");
       setMessage("Erro de conexão com o servidor.");
       setShowPopup(true);
@@ -82,7 +82,7 @@ const LoginPage = () => {
 
   return (
     <div className="login-container">
-    <img src="/logo-nex-talents.png" alt="Nex.Talents" className="logo" />
+      <img src="/logo-nextTalents.png" alt="Nex.Talents" className="logo" />
       <div className="login-box">
         <h2>Login</h2>
         <label>Email:</label>
@@ -111,10 +111,10 @@ const LoginPage = () => {
       </div>
 
       <PopupMessage
-            type={popupType}
-            message={message}
-            onClose={() => setShowPopup(false)}
-          />
+        type={popupType}
+        message={message}
+        onClose={() => setShowPopup(false)}
+      />
     </div>
   );
 };
