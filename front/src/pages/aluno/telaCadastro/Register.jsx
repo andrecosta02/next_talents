@@ -161,6 +161,7 @@ const Register = () => {
 
   return (
     <div className="register-container">
+      <img src="/logo-nextTalents.png" alt="Nex.Talents" className="logo" />
       <form className="register-form" onSubmit={handleSubmit}>
         <h2>Criar Conta</h2>
         <div className="input-row">

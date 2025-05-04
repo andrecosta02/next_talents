@@ -9,7 +9,7 @@
   
   .register-form {
     background-color:#4aa382;
-    padding: 40px 30px;
+    padding: 10px 30px 30px 30px;
     border-radius: 12px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 100%;
@@ -25,8 +25,8 @@
   }
   
   .register-form input {
-    padding: 12px;
-    margin-bottom: 15px;
+    padding: 10px;
+    margin-bottom: 10px;
     border: 1px solid #dcdcdc;
     border-radius: 8px;
     font-size: 15px;
@@ -51,6 +51,7 @@
     display: flex;
     justify-content: space-between;
     margin-top: 10px;
+    gap: 10px;
   }
   
   .button-row button {

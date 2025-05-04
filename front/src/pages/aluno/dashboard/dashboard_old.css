@@ -8,13 +8,7 @@ body {
 
 header > img {
   margin-left: 60px;
-  transition: margin-left 0.3s ease;
 }
-
-.dashboard-menu.open ~ .dashboard-logo {
-  margin-left: 220px;
-}
-
 
 .dashboard-container {
   display: flex;
@@ -24,6 +18,7 @@ header > img {
 
 .dashboard-header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   background-color: #ffffff;
   padding: 10px 20px;
@@ -34,6 +29,20 @@ header > img {
 
 .dashboard-logo {
   height: 35px;
+}
+
+.dashboard-actions {
+  display: flex;
+  align-items: center;
+}
+
+.dashboard-actions button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  margin-left: 12px;
+  cursor: pointer;
+  color: #333;
 }
 
 .dashboard-body {
@@ -49,60 +58,43 @@ header > img {
   height: 100%;
   background-color: #ffffff;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.08);
-  padding-top: 60px;
+  padding-top: 30px;
   display: flex;
   flex-direction: column;
-  /* justify-content: space-between; */
-  justify-content: flex-start;
-  transition: width 0.3s ease;
+  align-items: center;
   z-index: 1002;
+  transition: width 0.3s ease;
+  /* margin: 0px 0; */
 }
 
 .dashboard-menu.open {
   width: 220px;
+  align-items: flex-start;
 }
 
 .menu-toggle {
   position: absolute;
   top: 10px;
-  left: 10px;
   background: none;
   border: none;
   font-size: 20px;
   cursor: pointer;
+  z-index: 1100;
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 6px 12px;
-  transition: background 0.5s;
+  width: 100%;
+  padding: 10px 15px;
+  transition: background 0.2s;
 }
 
-.menu-toggle:hover {
-  background-color: #f0f0f0;
-}
-
-.menu-section,
-.menu-bottom {
-  display: flex;
-  flex-direction: column;
-  padding: 10px 0;
-}
-
-.menu-section {
-  gap: 4px;
-}
-
-.menu-bottom {
-  margin-top: auto;
-  margin-bottom: 80px;
-  gap: 4px;
-}
-
-.menu-item {
+.dashboard-menu .menu-item {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 6px 12px;
+  width: 100%;
+  /* padding: 10px 15px; */
+  padding: 10px 15px;
   border: none;
   background: none;
   font-size: 14px;
@@ -110,15 +102,17 @@ header > img {
   cursor: pointer;
   color: #333;
   transition: background 0.2s;
-  width: 100%;
 }
 
-.menu-item:hover {
-  background-color: #f0f0f0;
+.dashboard-menu .menu-item:hover {
+    /* background-color: #f0f0f0; */
+    background-color: #68a58f;
+    transition: background 0.5s;
 }
 
-.icon {
+.dashboard-menu .icon {
   font-size: 18px;
+  text-align: center;
   width: 20px;
 }
 

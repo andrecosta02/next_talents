@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getLoggedUser } from "../../../utils/auth";
+// import "./dashboard.css";
 import "./dashboard.css";
 
 const Dashboard = () => {
@@ -48,40 +49,47 @@ const Dashboard = () => {
           alt="Logo"
           className="dashboard-logo"
         />
-        <div className="dashboard-actions">
-          <button onClick={() => setSelectedMenu("perfil")} title="Meu Perfil">👤</button>
-          <button onClick={handleLogout} title="Sair">🚪</button>
-        </div>
       </header>
 
       <div className={`dashboard-menu ${menuOpen ? "open" : ""}`}>
-        {/* <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>☰</button> */}
-
         <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
           <span className="icon">☰</span>
           <span className="text">Fechar</span>
         </button>
 
-        <button className="menu-item" onClick={() => setSelectedMenu("sobre")}>
-          <span className="icon">📄</span>
-          <span className="text">Sobre Mim</span>
-        </button>
-        <button className="menu-item" onClick={() => setSelectedMenu("meus")}>
-          <span className="icon">📁</span>
-          <span className="text">Meus Projetos</span>
-        </button>
-        <button className="menu-item" onClick={() => setSelectedMenu("geral")}>
-          <span className="icon">🌐</span>
-          <span className="text">Projetos Geral</span>
-        </button>
-        <button className="menu-item" onClick={() => setSelectedMenu("instituicoes")}>
-          <span className="icon">🏛️</span>
-          <span className="text">Instituições</span>
-        </button>
-        <button className="menu-item" onClick={() => setSelectedMenu("empresas")}>
-          <span className="icon">🏢</span>
-          <span className="text">Empresas</span>
-        </button>
+        <div className="menu-section">
+          <button className="menu-item" onClick={() => setSelectedMenu("sobre")}>
+            <span className="icon">📄</span>
+            <span className="text">Sobre Mim</span>
+          </button>
+          <button className="menu-item" onClick={() => setSelectedMenu("meus")}>
+            <span className="icon">📁</span>
+            <span className="text">Meus Projetos</span>
+          </button>
+          <button className="menu-item" onClick={() => setSelectedMenu("geral")}>
+            <span className="icon">🌐</span>
+            <span className="text">Projetos Geral</span>
+          </button>
+          <button className="menu-item" onClick={() => setSelectedMenu("instituicoes")}>
+            <span className="icon">🏛️</span>
+            <span className="text">Instituições</span>
+          </button>
+          <button className="menu-item" onClick={() => setSelectedMenu("empresas")}>
+            <span className="icon">🏢</span>
+            <span className="text">Empresas</span>
+          </button>
+        </div>
+
+        <div className="menu-bottom">
+          <button className="menu-item" onClick={() => setSelectedMenu("perfil")}>
+            <span className="icon">👤</span>
+            <span className="text">Meu Perfil</span>
+          </button>
+          <button className="menu-item" onClick={handleLogout}>
+            <span className="icon">🚪</span>
+            <span className="text">Sair</span>
+          </button>
+        </div>
       </div>
 
       <main className="dashboard-content">
