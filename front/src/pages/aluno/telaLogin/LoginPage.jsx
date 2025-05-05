@@ -82,7 +82,10 @@ const LoginPage = () => {
 
   return (
     <div className="login-container">
-      <img src="/logo-nextTalents.png" alt="Nex.Talents" className="logo" />
+      <a href="/">
+        <img src="/logo-nextTalents.png" alt="Nex.Talents" className="logo" />
+      </a>
+
       <div className="login-box">
         <h2>Login</h2>
         <label>Email:</label>

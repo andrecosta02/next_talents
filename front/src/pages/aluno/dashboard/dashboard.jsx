@@ -31,11 +31,11 @@ const Dashboard = () => {
       case "geral":
         return <div><h2>Projetos Geral</h2><p>Todos os projetos públicos.</p></div>;
       case "instituicoes":
-        return <div><h2>Instituições</h2><p>Lista de instituições e projetos validados.</p></div>;
+        return <div><h2>Instituições</h2><p>Lista de instituições cadastradas na plataforma.</p></div>;
       case "empresas":
         return <div><h2>Empresas</h2><p>Empresas disponíveis no sistema.</p></div>;
       case "perfil":
-        return <div><h2>Meu Perfil</h2><p>Editar informações de cadastro do usuário.</p></div>;
+        return <div><h2>Meu Perfil</h2><p>Editar informações de cadastro do usuário (email, senha, notificações).</p></div>;
       default:
         return null;
     }

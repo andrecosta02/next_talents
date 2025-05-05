@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import TelaInicio from './pages/aluno/telaInicio/TelaInicio';
+import Desenvolvimento from './pages/gerenic/PaginaEmDesenvolvimento';
 import Register from './pages/aluno/telaCadastro/Register';
 import TelaLogin from './pages/aluno/telaLogin/LoginPage';
 import ConfirmaEmail from './pages/aluno/confirmaEmail/confirmaEmail';
@@ -13,6 +14,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<TelaInicio />} />
+        <Route path="/desenvolvimento" element={<Desenvolvimento />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<TelaLogin />} />
         <Route path="/reset-senha" element={<NovaSenhaPage />} />
