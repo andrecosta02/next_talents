@@ -1,52 +1,3 @@
-use we_expedition;
-
--- Tabela USERS
-CREATE TABLE USERS (
-    id INT PRIMARY KEY,
-    name VARCHAR(255),
-    last_name VARCHAR(255),
-    cpf VARCHAR(11),
-    hash_psw VARCHAR(255),
-    gender CHAR(1),
-    birth DATE,
-    cep VARCHAR(20),
-    city VARCHAR(255),
-    we_current VARCHAR(255),
-    date_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Tabela ALERTS
-CREATE TABLE ALERTS (
-    id INT PRIMARY KEY,
-    user_id INT,
-    `order` VARCHAR(255),
-    message VARCHAR(255),
-    date_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES USERS(id)
-);
-
--- Tabela WE
-CREATE TABLE WE (
-    id INT PRIMARY KEY,
-    cod VARCHAR(255),
-    hash_psw VARCHAR(255),
-    user_creator INT,
-    location_origin VARCHAR(255),
-    location_destination VARCHAR(255),
-    criation VARCHAR(255),
-    expiration VARCHAR(255),
-    we_status VARCHAR(5),
-    date_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_creator) REFERENCES USERS(id)
-);
-
-
-
-
-
-
-
-
 -- Criação do Banco de Dados
 CREATE DATABASE next_talents;
 USE next_talents;
@@ -66,6 +17,7 @@ CREATE TABLE student (
     notification_vacancies BOOLEAN DEFAULT FALSE,
     notification_course BOOLEAN DEFAULT FALSE,
     darkmode BOOLEAN DEFAULT FALSE,
+    is_active BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -80,6 +32,7 @@ CREATE TABLE ie (
     cgc VARCHAR(11) UNIQUE,
     notification_email BOOLEAN DEFAULT FALSE,
     darkmode BOOLEAN DEFAULT FALSE,
+    is_active BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -94,6 +47,7 @@ CREATE TABLE enterprise (
     cgc VARCHAR(11) UNIQUE,
     notification_email BOOLEAN DEFAULT FALSE,
     darkmode BOOLEAN DEFAULT FALSE,
+    is_active BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -101,7 +55,7 @@ CREATE TABLE enterprise (
 -- Tabela: courses
 CREATE TABLE courses (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    id_ie INT NOT NULL,
+    id_ie_enterprise INT NOT NULL,
     title VARCHAR(256) NOT NULL,
     description VARCHAR(256),
     link VARCHAR(256),
@@ -162,9 +116,29 @@ CREATE TABLE students_registered (
     id INT PRIMARY KEY AUTO_INCREMENT,
     id_student INT NOT NULL,
     id_vacancy INT NOT NULL,
-    date DATE DEFAULT CURRENT_DATE,
+    date DATETIME DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (id_student) REFERENCES student(id),
     FOREIGN KEY (id_vacancy) REFERENCES vacancies(id)
+);
+
+CREATE TABLE password_resets (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    user_type ENUM('student', 'enterprise', 'ie') NOT NULL,
+    token VARCHAR(512) NOT NULL,
+    expires_at DATETIME NOT NULL,
+    used BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE activation_tokens (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    user_type ENUM('student', 'enterprise', 'ie') NOT NULL,
+    token VARCHAR(512) NOT NULL,
+    expires_at DATETIME NOT NULL,
+    used BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
