@@ -9,20 +9,23 @@ export default function TelaInicio() {
     <div className="container">
       <header className="header">
         <img src="/logo-nextTalents.png" alt="Nex.Talents Logo" className="logo" />
+        <h2>
+          Você cria. A gente conecta.
+        </h2>
       </header>
 
       <main className="main">
         <div className="description">
-          <i className="welcome">Seja bem-vindo(a)</i> à <strong>Next Talents</strong> uma plataforma conecta alunos criativos, escolas parceiras e empresas inovadoras em um só lugar. 
+          <i className="welcome">Seja bem-vindo(a)</i> à <strong>Next Talents</strong> uma plataforma onde jovens inscrevem seus projetos e mostram ao mundo quem são. Aqui, talento, criatividade e propósito se encontram em um só lugar. 
           <br />
           <br />
-          Aqui, jovens desenvolvem projetos reais, recebem validação de instituições de ensino e conquistam oportunidades com empresas que valorizam o talento na prática.
+          Conectamos jovens a instituições de ensino e empresas que reconhecem o valor de ideias autênticas e impulsionam novas oportunidades de futuro.
         </div>
 
         <div className="cards">
           <div className="card" onClick={() => navigate("/login")} style={{ cursor: "pointer" }}>
             <img src="/aluno.png" alt="Aluno" className="card-image" />
-            <span className="card-title">Aluno</span>
+            <span className="card-title">Jovem</span>
           </div>
           
           <div className="card" onClick={() => navigate("/desenvolvimento")} style={{ cursor: "pointer" }}>
@@ -42,7 +45,7 @@ export default function TelaInicio() {
           <h3>Como funciona a plataforma?</h3>
           <div className="workflow">
             <div className="workflow-step">
-              <strong>👩‍🎓 O aluno (Geração Z):</strong>
+              <strong>👩‍🎓 O jovem:</strong>
               <ul>
                 <li>Se cadastra no sistema</li>
                 <li>Cria um protótipo, projeto, solução ou produto</li>
@@ -52,7 +55,7 @@ export default function TelaInicio() {
             <div className="workflow-step">
               <strong>🏫 A instituição de ensino:</strong>
               <ul>
-                <li>Valida o que o aluno criou</li>
+                <li>Valida o que o jovem criou</li>
                 <li>Fornece um selo ou certificado de qualidade</li>
                 <li>Orienta e ajuda os alunos a evoluírem</li>
               </ul>

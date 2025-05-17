@@ -56,6 +56,8 @@ const LoginPage = () => {
         body: JSON.stringify({ email }),
       });
 
+      console.log(response)
+
       if (response.ok) {
         // setMensagem('se existir cadastro um email sera enviado');
 

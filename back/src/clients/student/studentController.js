@@ -320,7 +320,6 @@ module.exports = {
         }
     },
 
-
 }
 
 const isAdult = (value) => {
